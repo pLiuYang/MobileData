@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.assignment.mobiledata.R
 import com.assignment.mobiledata.util.ViewModelFactory
+import kotlinx.android.synthetic.main.main_fragment.loadingView
 import kotlinx.android.synthetic.main.main_fragment.recyclerView
 
 class MainFragment : Fragment() {
@@ -44,12 +45,15 @@ class MainFragment : Fragment() {
 
         viewModel.dataList.observe(viewLifecycleOwner, Observer {
             adapter.setItems(it)
+            loadingView.visibility = View.GONE
         })
 
         viewModel.error.observe(viewLifecycleOwner, Observer {
             Toast.makeText(context, it, Toast.LENGTH_LONG).show()
+            loadingView.visibility = View.GONE
         })
 
+        loadingView.visibility = View.VISIBLE
         viewModel.loadData()
     }
 
