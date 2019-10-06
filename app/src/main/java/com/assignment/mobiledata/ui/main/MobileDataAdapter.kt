@@ -9,7 +9,8 @@ import com.assignment.mobiledata.data.RecordDisplayModel
 import kotlinx.android.synthetic.main.list_item.view.imageView
 import kotlinx.android.synthetic.main.list_item.view.textViewDataConsumption
 
-class MobileDataAdapter : RecyclerView.Adapter<MobileDataAdapter.MobileDataViewHolder>() {
+class MobileDataAdapter(private val clickAction: () -> Unit) :
+    RecyclerView.Adapter<MobileDataAdapter.MobileDataViewHolder>() {
 
     private val items = mutableListOf<RecordDisplayModel>()
 
@@ -19,7 +20,8 @@ class MobileDataAdapter : RecyclerView.Adapter<MobileDataAdapter.MobileDataViewH
                 R.layout.list_item,
                 parent,
                 false
-            )
+            ),
+            clickAction
         )
     }
 
@@ -38,10 +40,15 @@ class MobileDataAdapter : RecyclerView.Adapter<MobileDataAdapter.MobileDataViewH
         notifyDataSetChanged()
     }
 
-    class MobileDataViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    class MobileDataViewHolder(itemView: View, clickAction: () -> Unit) :
+        RecyclerView.ViewHolder(itemView) {
 
         private val textView = itemView.textViewDataConsumption
         private val imageView = itemView.imageView
+
+        init {
+            imageView.setOnClickListener { clickAction.invoke() }
+        }
 
         fun bind(data: RecordDisplayModel) {
             textView.text = itemView.context.getString(

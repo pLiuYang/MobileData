@@ -2,6 +2,7 @@
     <string name="app_name">MobileData</string>
 
     <string name="mobile_data_consumption">%s (PB) in %s</string>
+    <string name="down_trending_message">A decrease of volume data happened during this year.</string>
 
     <string name="image_description">decrease in volume data</string>
 </resources>
