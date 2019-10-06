@@ -1,11 +1,15 @@
 package com.assignment.mobiledata.data
 
+import androidx.room.ColumnInfo
+import androidx.room.Entity
+import androidx.room.PrimaryKey
 import org.json.JSONObject
 
+@Entity(tableName = "records")
 data class Record(
-    val volumeOfMobileData: String,
-    val quarter: String,
-    val id: Int
+    @ColumnInfo(name = "volume_of_mobile_data") val volumeOfMobileData: String,
+    @ColumnInfo(name = "quarter") val quarter: String,
+    @PrimaryKey val id: Int
 ) {
     constructor(jsonObject: JSONObject) : this(
         jsonObject.optString("volume_of_mobile_data"),

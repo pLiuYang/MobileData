@@ -3,20 +3,26 @@ package com.assignment.mobiledata.data
 import androidx.annotation.VisibleForTesting
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import com.assignment.mobiledata.data.local.RecordDao
 import com.assignment.mobiledata.util.readStream
 import org.json.JSONException
 import org.json.JSONObject
+import java.net.ConnectException
 import java.net.HttpURLConnection
 import java.net.URL
 
-class MobileDataRepositoryRemote : IMobileDataRepository {
+class MobileDataRepository(private val recordDao: RecordDao) : IMobileDataRepository {
 
     private val records = MutableLiveData<List<Record>>()
     private val error = MutableLiveData<String>()
 
     override fun loadMobileData() {
         Thread(Runnable {
-            callApi(ENDPOINT)
+            if (apiAvailable(ENDPOINT)) {
+                callApi(ENDPOINT)
+            } else {
+                loadCache()
+            }
         }).start()
     }
 
@@ -51,9 +57,32 @@ class MobileDataRepositoryRemote : IMobileDataRepository {
                         list.add(Record(array.optJSONObject(i)))
                     }
                     records.postValue(list)
+                    recordDao.deleteAllRecords()
+                    recordDao.insertAllRecords(list)
                 }
         } catch (e: JSONException) {
             e.printStackTrace()
+        }
+    }
+
+    @VisibleForTesting
+    fun apiAvailable(endpoint: String): Boolean {
+        var available = false
+        try {
+            available = URL(endpoint).openConnection().getInputStream().readStream().isNotEmpty()
+        } catch (e: ConnectException) {
+            e.printStackTrace()
+        }
+        return available
+    }
+
+    @VisibleForTesting
+    fun loadCache() {
+        val list = recordDao.getAllRecords()
+        if (list.isEmpty()) {
+            error.postValue("No records found")
+        } else {
+            records.postValue(list)
         }
     }
 

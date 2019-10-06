@@ -41,7 +41,8 @@ class MainFragment : Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        viewModel = ViewModelProviders.of(this, ViewModelFactory()).get(MainViewModel::class.java)
+        viewModel = ViewModelProviders.of(this, ViewModelFactory(activity!!.applicationContext))
+            .get(MainViewModel::class.java)
 
         viewModel.dataList.observe(viewLifecycleOwner, Observer {
             adapter.setItems(it)
