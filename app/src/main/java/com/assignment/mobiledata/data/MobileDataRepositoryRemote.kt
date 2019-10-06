@@ -16,7 +16,7 @@ class MobileDataRepositoryRemote : IMobileDataRepository {
 
     override fun loadMobileData() {
         Thread(Runnable {
-            callApi()
+            callApi(ENDPOINT)
         }).start()
     }
 
@@ -25,9 +25,9 @@ class MobileDataRepositoryRemote : IMobileDataRepository {
     override fun getErrorLiveData(): LiveData<String> = error
 
     @VisibleForTesting
-    fun callApi() {
+    fun callApi(endpoint: String) {
         try {
-            val url = URL(ENDPOINT)
+            val url = URL(endpoint)
             val con = url.openConnection() as HttpURLConnection
 
             if (con.responseCode == HttpURLConnection.HTTP_OK) {
@@ -63,7 +63,7 @@ class MobileDataRepositoryRemote : IMobileDataRepository {
 
     companion object {
         private const val ENDPOINT =
-            "https://data.gov.sg/api/action/datastore_search?resource_id=a807b7ab-6cad-4aa6-87d0-e283a7353a0f&limit=5"
+            "https://data.gov.sg/api/action/datastore_search?resource_id=a807b7ab-6cad-4aa6-87d0-e283a7353a0f"
     }
 
 }

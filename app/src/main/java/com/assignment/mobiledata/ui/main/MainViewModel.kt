@@ -2,14 +2,14 @@ package com.assignment.mobiledata.ui.main
 
 import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
-import com.assignment.mobiledata.data.IMobileDataRepository
+import com.assignment.mobiledata.domain.IRecordUseCases
 
-class MainViewModel(private val mobileDataRepo: IMobileDataRepository) : ViewModel() {
+class MainViewModel(private val recordUseCases: IRecordUseCases) : ViewModel() {
 
-    val dataList = Transformations.map(mobileDataRepo.getRecordsLiveData()) { it }
+    val dataList = Transformations.map(recordUseCases.getYearlyRecordsLiveData()) { it }
 
-    val error = Transformations.map(mobileDataRepo.getErrorLiveData()) { it }
+    val error = Transformations.map(recordUseCases.getErrorLiveData()) { it }
 
-    fun loadData() = mobileDataRepo.loadMobileData()
+    fun loadData() = recordUseCases.loadMobileData()
 
 }

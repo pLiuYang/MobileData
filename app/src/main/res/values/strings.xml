@@ -1,5 +1,7 @@
 <resources>
     <string name="app_name">MobileData</string>
 
+    <string name="mobile_data_consumption">%s (PB) in %s</string>
+
     <string name="image_description">decrease in volume data</string>
 </resources>

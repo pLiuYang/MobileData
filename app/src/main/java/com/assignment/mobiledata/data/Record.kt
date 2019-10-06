@@ -13,3 +13,9 @@ data class Record(
         jsonObject.optInt("_id")
     )
 }
+
+fun Record.getYear() = quarter.substring(0, 4)
+
+fun Record.getVolumeOfDataInFloat(): Float {
+    return volumeOfMobileData.toFloatOrNull() ?: 0f
+}

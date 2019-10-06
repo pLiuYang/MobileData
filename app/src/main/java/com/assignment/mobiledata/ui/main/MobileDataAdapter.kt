@@ -5,13 +5,13 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.assignment.mobiledata.R
-import com.assignment.mobiledata.data.Record
+import com.assignment.mobiledata.data.RecordDisplayModel
 import kotlinx.android.synthetic.main.list_item.view.imageView
 import kotlinx.android.synthetic.main.list_item.view.textViewDataConsumption
 
 class MobileDataAdapter : RecyclerView.Adapter<MobileDataAdapter.MobileDataViewHolder>() {
 
-    private val items = mutableListOf<Record>()
+    private val items = mutableListOf<RecordDisplayModel>()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MobileDataViewHolder {
         return MobileDataViewHolder(
@@ -32,7 +32,7 @@ class MobileDataAdapter : RecyclerView.Adapter<MobileDataAdapter.MobileDataViewH
     /**
      * Update items and refresh UI.
      */
-    fun setItems(newItems: List<Record>) {
+    fun setItems(newItems: List<RecordDisplayModel>) {
         items.clear()
         items.addAll(newItems)
         notifyDataSetChanged()
@@ -43,8 +43,18 @@ class MobileDataAdapter : RecyclerView.Adapter<MobileDataAdapter.MobileDataViewH
         private val textView = itemView.textViewDataConsumption
         private val imageView = itemView.imageView
 
-        fun bind(data: Record) {
-            textView.text = data.volumeOfMobileData
+        fun bind(data: RecordDisplayModel) {
+            textView.text = itemView.context.getString(
+                R.string.mobile_data_consumption,
+                data.dataVolume,
+                data.year
+            )
+            imageView.visibility =
+                if (data.downTrending) {
+                    View.VISIBLE
+                } else {
+                    View.GONE
+                }
         }
     }
 
