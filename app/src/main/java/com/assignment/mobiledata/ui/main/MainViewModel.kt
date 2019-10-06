@@ -1,16 +1,15 @@
 package com.assignment.mobiledata.ui.main
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
+import com.assignment.mobiledata.data.IMobileDataRepository
 
-class MainViewModel : ViewModel() {
+class MainViewModel(private val mobileDataRepo: IMobileDataRepository) : ViewModel() {
 
-    private val _dataList = MutableLiveData<List<String>>()
-    val dataList: LiveData<List<String>> = _dataList
+    val dataList = Transformations.map(mobileDataRepo.getRecordsLiveData()) { it }
 
-    fun loadData() {
-        _dataList.value = listOf("0.5", "8.8", "1.2")
-    }
+    val error = Transformations.map(mobileDataRepo.getErrorLiveData()) { it }
+
+    fun loadData() = mobileDataRepo.loadMobileData()
 
 }
